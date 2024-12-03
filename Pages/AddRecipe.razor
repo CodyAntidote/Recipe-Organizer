@@ -1,0 +1,40 @@
+@page "/AddRecipe"  
+@using RecipeOrganizer.Services  
+@inject RecipeService RecipeService  
+@inject NavigationManager NavigationManager  
+
+<h3>Add Recipe</h3>  
+
+<div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">  
+    <EditForm Model="newRecipe" OnValidSubmit="HandleValidSubmit">  
+        <DataAnnotationsValidator />  
+        <ValidationSummary />  
+
+        <div style="margin-bottom: 15px;">  
+            <label>Name:</label>  
+            <InputText @bind-Value="newRecipe.Name" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+        </div>  
+        <div style="margin-bottom: 15px;">  
+            <label>Description:</label>  
+            <InputTextArea @bind-Value="newRecipe.Description" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+        </div>  
+        <div style="margin-bottom: 15px;">  
+            <label>Used For:</label>  
+            <InputText @bind-Value="newRecipe.UsedFor" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+        </div>  
+
+        <button type="submit" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">  
+            Add Recipe  
+        </button>  
+    </EditForm>  
+</div>  
+
+@code {  
+    private Recipe newRecipe = new Recipe();  
+
+    private void HandleValidSubmit()  
+    {  
+        RecipeService.AddRecipe(newRecipe);  
+        NavigationManager.NavigateTo("/recipe-list"); // Redirect back to the list  
+    }  
+}

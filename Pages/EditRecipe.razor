@@ -1,0 +1,53 @@
+@page "/edit"  
+@using RecipeOrganizer.Services  
+@inject RecipeService RecipeService  
+@inject NavigationManager NavigationManager  // Make sure to inject NavigationManager  
+
+<h3>Edit Recipe</h3>  
+
+@if (currentRecipe != null)  
+{  
+    <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);">  
+        <EditForm Model="@currentRecipe" OnValidSubmit="HandleValidSubmit">  
+            <DataAnnotationsValidator />  
+            <ValidationSummary />  
+
+            <div style="margin-bottom: 15px;">  
+                <label for="name" style="font-weight: bold;">Recipe Name</label>  
+                <InputText id="name" @bind-Value="currentRecipe.Name" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+            </div>  
+            <div style="margin-bottom: 15px;">  
+                <label for="description" style="font-weight: bold;">Description</label>  
+                <InputTextArea id="description" @bind-Value="currentRecipe.Description" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+            </div>  
+            <div style="margin-bottom: 15px;">  
+                <label for="usedFor" style="font-weight: bold;">Used For</label>  
+                <InputText id="usedFor" @bind-Value="currentRecipe.UsedFor" style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px;" />  
+            </div>  
+
+            <button type="submit" style="padding: 10px 20px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">  
+                Update Recipe  
+            </button>  
+        </EditForm>  
+    </div>  
+}  
+else  
+{  
+    <p>Recipe not found.</p>  
+}  
+
+@code {  
+    [Parameter] public int Id { get; set; }  
+    private Recipe currentRecipe;  
+
+    protected override void OnInitialized()  
+    {  
+        currentRecipe = RecipeService.GetAllRecipes().FirstOrDefault(r => r.Id == Id);  
+    }  
+
+    private void HandleValidSubmit()  
+    {  
+        RecipeService.UpdateRecipe(currentRecipe);  
+        NavigationManager.NavigateTo("/recipe-list"); // Redirect to the recipe list after update  
+    }  
+}

@@ -1,0 +1,19 @@
+@page "/recipe-list"  
+@inject RecipeOrganizer.Services.RecipeService RecipeService  
+@inject NavigationManager NavigationManager   
+
+<h3>Recipe List</h3>  
+
+<ul style="list-style-type: none; padding: 0;">  
+    @foreach (var recipe in RecipeService.GetAllRecipes())  
+    {  
+        <li>  
+            <h5>@recipe.Name</h5>  
+            <p><strong>Description:</strong> @recipe.Description</p>  
+            <p><strong>Price:</strong> @recipe.UsedFor</p>  
+
+            <NavLink class="btn btn-warning" href="@($"/edit")">Edit</NavLink>  
+            <NavLink class="btn btn-danger" href="@($"/delete-confirmation")">Delete</NavLink>  
+        </li>  
+    }  
+</ul>

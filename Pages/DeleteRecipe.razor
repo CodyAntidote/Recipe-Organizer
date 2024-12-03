@@ -1,0 +1,38 @@
+@page "/delete"  
+@using RecipeOrganizer.Services  
+@inject RecipeService RecipeService  
+@inject NavigationManager NavigationManager  
+
+<h3>Delete Recipe Confirmation</h3>  
+
+@if (recipeToDelete != null)  
+{  
+    <p>Are you sure you want to delete the recipe <strong>@recipeToDelete.Name</strong>?</p>  
+    <button @onclick="ConfirmDelete" style="padding: 5px 10px; background-color: #e74c3c; color: white; border: none; border-radius: 5px; cursor: pointer;">Yes, Delete</button>  
+    <button @onclick="CancelDelete" style="padding: 5px 10px; background-color: #3498db; color: white; border: none; border-radius: 5px; cursor: pointer;">Cancel</button>  
+}  
+else  
+{  
+    <p>Recipe not found.</p>  
+}  
+
+@code {  
+    [Parameter] public int Id { get; set; }  
+    private Recipe recipeToDelete;  
+
+    protected override void OnInitialized()  
+    {  
+        recipeToDelete = RecipeService.GetAllRecipes().FirstOrDefault(r => r.Id == Id);  
+    }  
+
+    private void ConfirmDelete()  
+    {  
+        RecipeService.DeleteRecipe(Id);  
+        NavigationManager.NavigateTo("/recipe-list");  
+    }  
+
+    private void CancelDelete()  
+    {  
+        NavigationManager.NavigateTo("/recipe-list");  
+    }  
+}
